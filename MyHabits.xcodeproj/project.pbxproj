@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D53AF22026865F430001F3B7 /* HabitsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D53AF21F26865F430001F3B7 /* HabitsStore.swift */; };
 		D53AF22D268A24400001F3B7 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D53AF22C268A24400001F3B7 /* Storage.swift */; };
 		D53AF230268A29C60001F3B7 /* HabitProgressCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D53AF22F268A29C60001F3B7 /* HabitProgressCollectionViewCell.swift */; };
+		D53AF236268CB7B60001F3B7 /* HabitsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D53AF235268CB7B60001F3B7 /* HabitsStore.swift */; };
 		D5B59A87267BA55600677EC1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B59A86267BA55600677EC1 /* AppDelegate.swift */; };
 		D5B59A89267BA55600677EC1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B59A88267BA55600677EC1 /* SceneDelegate.swift */; };
 		D5B59A8B267BA55600677EC1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B59A8A267BA55600677EC1 /* ViewController.swift */; };
@@ -30,9 +30,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D53AF21F26865F430001F3B7 /* HabitsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HabitsStore.swift; path = "../../../../../../Downloads/iosui-diplom-main-2/HabitsStore.swift"; sourceTree = "<group>"; };
 		D53AF22C268A24400001F3B7 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		D53AF22F268A29C60001F3B7 /* HabitProgressCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitProgressCollectionViewCell.swift; sourceTree = "<group>"; };
+		D53AF235268CB7B60001F3B7 /* HabitsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HabitsStore.swift; path = "../../../../../Downloads/iosui-diplom-main-2/HabitsStore.swift"; sourceTree = "<group>"; };
 		D5B59A83267BA55600677EC1 /* MyHabits.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyHabits.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5B59A86267BA55600677EC1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D5B59A88267BA55600677EC1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -115,7 +115,7 @@
 		D5B59AC2267F986700677EC1 /* Habits */ = {
 			isa = PBXGroup;
 			children = (
-				D53AF21F26865F430001F3B7 /* HabitsStore.swift */,
+				D53AF235268CB7B60001F3B7 /* HabitsStore.swift */,
 				D5B59AA2267BC42700677EC1 /* HabitsViewController.swift */,
 				D5B59AC92680FE4100677EC1 /* HabitsCollectionViewCell.swift */,
 				D53AF22F268A29C60001F3B7 /* HabitProgressCollectionViewCell.swift */,
@@ -199,11 +199,11 @@
 				D5B59AB8267E0B4C00677EC1 /* InfoSection.swift in Sources */,
 				D5B59AAE267DD54600677EC1 /* InfoTableViewCell.swift in Sources */,
 				D5B59AB2267E028900677EC1 /* InfoTableHeaderView.swift in Sources */,
-				D53AF22026865F430001F3B7 /* HabitsStore.swift in Sources */,
 				D5B59AB5267E0ADD00677EC1 /* InfoStorage.swift in Sources */,
 				D5B59A9D267BAE7100677EC1 /* LaunchScreen.swift in Sources */,
 				D5B59AA3267BC42700677EC1 /* HabitsViewController.swift in Sources */,
 				D53AF230268A29C60001F3B7 /* HabitProgressCollectionViewCell.swift in Sources */,
+				D53AF236268CB7B60001F3B7 /* HabitsStore.swift in Sources */,
 				D5B59ACA2680FE4100677EC1 /* HabitsCollectionViewCell.swift in Sources */,
 				D5B59AC0267F8DDF00677EC1 /* InfoTableFooterView.swift in Sources */,
 				D5B59A8B267BA55600677EC1 /* ViewController.swift in Sources */,
