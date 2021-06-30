@@ -33,6 +33,7 @@ class HabitProgressCollectionViewCell: UICollectionViewCell {
     private let percentLabel: UILabel = {
         let label = UILabel()
         label.text = "50%"
+        label.textAlignment = .right
         label.textColor = .systemGray
         label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         return label

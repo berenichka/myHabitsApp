@@ -37,8 +37,9 @@ class HabitsCollectionViewCell: UICollectionViewCell {
     
     private var countLabel: UILabel = {
         var label = UILabel()
+        var counter = Int()
         label.sizeToFit()
-        label.text = "Счётчик: "
+        label.text = "Счётчик: \(counter)"
         label.textColor = .systemGray
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         return label
@@ -48,7 +49,8 @@ class HabitsCollectionViewCell: UICollectionViewCell {
         let button = UIButton()
         button.clipsToBounds = true
         button.layer.borderWidth = 1
-        button.layer.cornerRadius = CGFloat(button.frame.width / 2)
+        button.layer.cornerRadius = 19
+        button.backgroundColor = .clear
         return button
         
     }()
@@ -72,7 +74,7 @@ class HabitsCollectionViewCell: UICollectionViewCell {
         nameLabel.frame = CGRect(x: CGFloat(indent), y: CGFloat(indent), width: 220, height: 22)
         timeLabel.frame = CGRect(x: CGFloat(indent), y: CGFloat(nameLabel.frame.maxY) + 4, width: 117, height: 16)
         countLabel.frame = CGRect(x: CGFloat(indent), y: CGFloat(timeLabel.frame.maxY) + 30, width: 188, height: 18)
-        colorCircleButton.frame = CGRect(x: CGFloat(self.frame.maxX) - 25, y: CGFloat(self.frame.midY), width: 38, height: 38)
+        colorCircleButton.frame = CGRect(x: CGFloat(contentView.frame.width) - 50, y: 46, width: 38, height: 38)
     }
     
     override func layoutSubviews() {
