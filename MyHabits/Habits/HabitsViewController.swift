@@ -29,7 +29,14 @@ class HabitsViewController: UIViewController {
     private let leftIndent = 16
     private let rightIndent = 17
     
-    private var myProgress: [ProgressSection] = [] {
+    private var myProgress = HabitProgressCollectionViewCell() {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
+    //HabitsViewController
+    private var myHabits: [Habit] = [] {
         didSet {
             collectionView.reloadData()
         }
@@ -47,29 +54,12 @@ class HabitsViewController: UIViewController {
         return collectionView
     }()
     
-    private let topView: UIView = {
+    private let placeHolderView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
     }()
     
-    
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
-        label.textColor = .black
-        label.textAlignment = .left
-        label.text = "Сегодня"
-        return label
-    }()
-
-    private let addButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "addButtonSymbol"), for: .normal)
-        button.imageView?.contentMode = .scaleAspectFit
-        button.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        return button
-    }()
     
     @objc func habitCreateChange() {
 
@@ -81,43 +71,45 @@ class HabitsViewController: UIViewController {
         
     }
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.isHidden = true
-        view.backgroundColor = UIColor(named: "lightGrayCustom")
-        view.addSubview(topView)
-        view.addSubview(collectionView)
-        topView.addSubview(titleLabel)
-        topView.addSubview(addButton)
         
+        view.backgroundColor = UIColor(named: "lightGrayCustom")
+        view.addSubview(placeHolderView)
+        view.addSubview(collectionView)
+        view.sendSubviewToBack(placeHolderView)
+   
+
+        title = "Сегодня"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationBar.backgroundColor = UIColor(named: "NavBarWhite")
+        self.navigationController?.navigationBar.scrollEdgeAppearance = UINavigationBarAppearance()
         self.navigationController?.modalPresentationStyle = .fullScreen
         
-        topView.translatesAutoresizingMaskIntoConstraints = false
-        topView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        topView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        topView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        topView.heightAnchor.constraint(equalToConstant: 140).isActive = true
         
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.topAnchor.constraint(equalTo: topView.topAnchor, constant: 92).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 14).isActive = true
-        titleLabel.widthAnchor.constraint(equalToConstant: 141).isActive = true
-        titleLabel.bottomAnchor.constraint(equalTo: topView.bottomAnchor, constant: -8).isActive = true
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "addButtonSymbol"), style: .plain, target: self, action: #selector(habitCreateChange))
+        self.navigationController?.navigationBar.tintColor = UIColor(named: "Purple")
         
-        addButton.translatesAutoresizingMaskIntoConstraints = false
-        addButton.topAnchor.constraint(equalTo: topView.topAnchor, constant: 44).isActive = true
-        addButton.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -5).isActive = true
-        addButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        addButton.widthAnchor.constraint(equalTo: addButton.heightAnchor).isActive = true
-        addButton.addTarget(self, action: #selector(habitCreateChange), for: .touchUpInside)
+        placeHolderView.translatesAutoresizingMaskIntoConstraints = false
+        placeHolderView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        placeHolderView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        placeHolderView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        placeHolderView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor).isActive = true
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.topAnchor.constraint(equalTo: topView.bottomAnchor).isActive = true
-        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CGFloat(leftIndent)).isActive = true
-        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -CGFloat(rightIndent)).isActive = true
-        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -CGFloat(10)).isActive = true
+        collectionView.topAnchor.constraint(equalTo: placeHolderView.topAnchor).isActive = true
+        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
- 
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super .viewWillAppear(true)
+        self.myHabits = HabitsStore.shared.habits
+        collectionView.reloadData()
+        
     }
 
 }
@@ -125,7 +117,7 @@ class HabitsViewController: UIViewController {
 extension HabitsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width: CGFloat
-        width = collectionView.frame.width
+        width = collectionView.frame.width - CGFloat(leftIndent) - CGFloat(rightIndent)
         
         let height: CGFloat
         switch Section(section: indexPath.section) {
@@ -141,12 +133,12 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 22, left: .zero, bottom: .zero, right: .zero)
+        return UIEdgeInsets(top: 22, left: 16, bottom: 10, right: 17)
     }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//        return 12
-//    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 12
+    }
     
     
 }
@@ -154,10 +146,13 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
 
 extension HabitsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
         if section == 0 {
             return 1
         } else {
-            return HabitsStore.shared.habits.count
+            
+            return myHabits.count
+            
         }
     }
     
@@ -167,7 +162,8 @@ extension HabitsViewController: UICollectionViewDataSource {
             let cellTypeHabit = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: HabitsCollectionViewCell.self), for: indexPath) as! HabitsCollectionViewCell
 
             if indexPath.section == 1 {
-                cellTypeHabit.habit = HabitsStore.shared.habits[indexPath.item]}
+                cellTypeHabit.habit = myHabits[indexPath.item]}
+            
                 return cellTypeHabit
 
         case .Progress:
@@ -185,3 +181,6 @@ extension HabitsViewController: UICollectionViewDataSource {
     }
     
 }
+
+
+

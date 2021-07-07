@@ -164,9 +164,13 @@
             <point key="canvasLocation" x="4163.768115942029" y="239.73214285714283"/>
         </scene>
     </scenes>
+    <color key="tintColor" name="Blue"/>
     <resources>
         <image name="Shape" width="23" height="23"/>
         <image name="info.circle.fill" catalog="system" width="128" height="121"/>
+        <namedColor name="Blue">
+            <color red="0.16078431372549021" green="0.42745098039215684" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="Purple">
             <color red="0.63137254901960782" green="0.086274509803921567" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

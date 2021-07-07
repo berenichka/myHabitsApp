@@ -58,6 +58,8 @@ class HabitViewController: UIViewController {
         return button
     }()
     
+    
+  
     private let timeLabel: UILabel = {
         let label = UILabel()
         label.text = "ВРЕМЯ"
@@ -66,6 +68,7 @@ class HabitViewController: UIViewController {
         return label
     }()
     
+    //HabitViewController - проблема с отображением лейбла
     private var timeText: UILabel = {
         let text = UILabel()
         text.text = "Каждый день в "
@@ -77,25 +80,30 @@ class HabitViewController: UIViewController {
     private let timePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = .time
+        let localeID = Locale.current
+        picker.locale = localeID
         picker.preferredDatePickerStyle = .wheels
+        
         return picker
     }()
     
-    private let habitDeleteButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Удалить привычку", for: .normal)
-        button.setTitleColor(UIColor(named: "Red"), for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        button.titleLabel?.textAlignment = .center
-        return button
-    }()
+//    private let habitDeleteButton: UIButton = {
+//        let button = UIButton()
+//        button.setTitle("Удалить привычку", for: .normal)
+//        button.setTitleColor(UIColor(named: "Red"), for: .normal)
+//        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+//        button.titleLabel?.textAlignment = .center
+//        return button
+//    }()
     
 
     
     @objc func timeChanged() {
         let formatter  = DateFormatter()
         formatter.dateFormat = "HH:mm a"
-        timeText.text! = "Каждый день в " + formatter.string(from: timePicker.date)
+        
+        timeText.text! = "Каждый день в \(formatter.string(from: timePicker.date))"
+//            + formatter.string(from: timePicker.date)
     }
     
     @objc func cancelBarButtonPressed() {
@@ -105,11 +113,12 @@ class HabitViewController: UIViewController {
     
     @objc func saveBarButtonPressed() {
        
-        let newHabit = Habit(name: habitText.text ?? "Название", date: timePicker.date, color: (circleColorButton.backgroundColor  ?? UIColor(named: "Purple"))!)
-                let store = HabitsStore.shared
-                store.habits.append(newHabit)
+        let newHabit = Habit(name: habitText.text ?? "Название", date: timePicker.date, color: (circleColorButton.backgroundColor ?? UIColor(named: "Purple"))!)
+        let store = HabitsStore.shared
+        store.habits.append(newHabit)
             
         self.dismiss(animated: true, completion: nil)
+        print(newHabit.date)
         
     
     }

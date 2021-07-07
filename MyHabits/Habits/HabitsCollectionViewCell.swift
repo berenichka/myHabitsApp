@@ -7,7 +7,15 @@
 
 import UIKit
 
+protocol HabitProgressCollectionViewCellDelegate: class {
+    func updateProgress()
+}
+
+
 class HabitsCollectionViewCell: UICollectionViewCell {
+    
+    
+    weak var delegate: HabitProgressCollectionViewCellDelegate?
     
     var habit: Habit? {
         didSet {
@@ -17,7 +25,8 @@ class HabitsCollectionViewCell: UICollectionViewCell {
             colorCircleButton.layer.borderColor = habit?.color.cgColor
         }
     }
-       
+    
+    var counter = 0
     private let indent = 20
     
     private let nameLabel: UILabel = {
@@ -30,14 +39,15 @@ class HabitsCollectionViewCell: UICollectionViewCell {
     private let timeLabel: UILabel = {
         let label = UILabel()
         label.sizeToFit()
-        label.textColor = .systemGray2
+        label.numberOfLines = 0
+        label.textColor = .systemGray
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         return label
     }()
     
-    private var countLabel: UILabel = {
+    private lazy var countLabel: UILabel = {
         var label = UILabel()
-        var counter = Int()
+        
         label.sizeToFit()
         label.text = "Счётчик: \(counter)"
         label.textColor = .systemGray
@@ -45,15 +55,16 @@ class HabitsCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private let colorCircleButton: UIButton = {
+    private lazy var colorCircleButton: UIButton = {
         let button = UIButton()
         button.clipsToBounds = true
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 19
-        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(circleButtonTapped), for: .touchUpInside)
         return button
         
     }()
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -64,25 +75,72 @@ class HabitsCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(timeLabel)
         contentView.addSubview(countLabel)
         contentView.addSubview(colorCircleButton)
+        
+        setupFrames()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    
     func setupFrames() {
-        nameLabel.frame = CGRect(x: CGFloat(indent), y: CGFloat(indent), width: 220, height: 22)
-        timeLabel.frame = CGRect(x: CGFloat(indent), y: CGFloat(nameLabel.frame.maxY) + 4, width: 117, height: 16)
-        countLabel.frame = CGRect(x: CGFloat(indent), y: CGFloat(timeLabel.frame.maxY) + 30, width: 188, height: 18)
-        colorCircleButton.frame = CGRect(x: CGFloat(contentView.frame.width) - 50, y: 46, width: 38, height: 38)
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(indent)).isActive = true
+        nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: CGFloat(indent)).isActive = true
+        nameLabel.widthAnchor.constraint(equalToConstant: 220).isActive = true
+        nameLabel.heightAnchor.constraint(equalToConstant: 22).isActive = true
+        
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        timeLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4).isActive = true
+        timeLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: CGFloat(indent)).isActive = true
+        timeLabel.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        timeLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        
+        countLabel.translatesAutoresizingMaskIntoConstraints = false
+        countLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 30).isActive = true
+        countLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: CGFloat(indent)).isActive = true
+        countLabel.widthAnchor.constraint(equalToConstant: 188).isActive = true
+        countLabel.heightAnchor.constraint(equalToConstant: 18).isActive = true
+        
+        colorCircleButton.translatesAutoresizingMaskIntoConstraints = false
+        colorCircleButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        colorCircleButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -26).isActive = true
+        colorCircleButton.widthAnchor.constraint(equalToConstant: 38).isActive = true
+        colorCircleButton.heightAnchor.constraint(equalToConstant: 38).isActive = true
+        
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        setupFrames()
+    
+    @objc func circleButtonTapped() {
+        colorCircleButton.backgroundColor = habit?.color
+        
+        let size = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        let imageParameters = UIImage.SymbolConfiguration(font: size)
+        let image = UIImage(systemName: "checkmark", withConfiguration: imageParameters)
+        colorCircleButton.setImage(image, for: .normal)
+        colorCircleButton.tintColor = .white
+        if habit?.isAlreadyTakenToday == false {
+        counter += 1
+        countLabel.text = "Счётчик: \(counter)"
+        HabitsStore.shared.track(habit!)
+//        guard let habit = habit else { return }
+            delegate?.updateProgress()}
+        
         
     }
    
 }
 
 
+extension HabitsCollectionViewCell: HabitProgressCollectionViewCellDelegate {
+    func updateProgress() {
+        let progressCell = HabitProgressCollectionViewCell()
+        let progress = progressCell.progressBar
+        let updatedProgress = HabitsStore.shared.todayProgress
+        progress.setProgress(updatedProgress, animated: false)
+        
+        
+    }
+}
