@@ -110,12 +110,31 @@
             </objects>
             <point key="canvasLocation" x="3362" y="240"/>
         </scene>
+        <!--Habit Details View Controller-->
+        <scene sceneID="cRp-b1-pQT">
+            <objects>
+                <viewController id="Evo-e5-WE7" customClass="HabitDetailsViewController" customModule="MyHabits" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ix2-f7-uYb">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Iwc-IC-QYE"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="ZcI-33-osB"/>
+                    <connections>
+                        <segue destination="Ft2-eN-Ncc" kind="presentation" id="aP5-Mf-LbA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="i1V-X4-ezi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3361" y="964"/>
+        </scene>
         <!--Habit View Controller-->
         <scene sceneID="y4p-Ia-9DU">
             <objects>
                 <viewController storyboardIdentifier="habit" id="Ft2-eN-Ncc" customClass="HabitViewController" customModule="MyHabits" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mlY-5z-3MM">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="xyr-T7-KUl"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -164,6 +183,9 @@
             <point key="canvasLocation" x="4163.768115942029" y="239.73214285714283"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="aP5-Mf-LbA"/>
+    </inferredMetricsTieBreakers>
     <color key="tintColor" name="Blue"/>
     <resources>
         <image name="Shape" width="23" height="23"/>

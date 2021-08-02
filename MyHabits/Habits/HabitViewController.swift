@@ -14,7 +14,24 @@ class HabitViewController: UIViewController {
     
     @IBOutlet weak var saveBarButton: UIBarButtonItem!
     
+    var habit: Habit? {
+        didSet {
+            if let habitChange = habit {
+                navigationItem.title = "Править"
+                habitText.text = habitChange.name
+                circleColorButton.backgroundColor = habitChange.color
+                timePicker.date = habitChange.date
+                timeText.text = habitChange.dateString
+            }
+            else {
+        
+                navigationItem.title = "Создать"
+                habitDeleteButton.isHidden = true
+            }
+        }
+    }
     
+ 
     
     private let sideIndent = 16
     private let smallIndent = 7
@@ -68,7 +85,7 @@ class HabitViewController: UIViewController {
         return label
     }()
     
-    //HabitViewController - проблема с отображением лейбла
+
     private var timeText: UILabel = {
         let text = UILabel()
         text.text = "Каждый день в "
@@ -87,14 +104,14 @@ class HabitViewController: UIViewController {
         return picker
     }()
     
-//    private let habitDeleteButton: UIButton = {
-//        let button = UIButton()
-//        button.setTitle("Удалить привычку", for: .normal)
-//        button.setTitleColor(UIColor(named: "Red"), for: .normal)
-//        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-//        button.titleLabel?.textAlignment = .center
-//        return button
-//    }()
+    private let habitDeleteButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Удалить привычку", for: .normal)
+        button.setTitleColor(UIColor(named: "Red"), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        button.titleLabel?.textAlignment = .center
+        return button
+    }()
     
 
     
@@ -102,8 +119,8 @@ class HabitViewController: UIViewController {
         let formatter  = DateFormatter()
         formatter.dateFormat = "HH:mm a"
         
+        
         timeText.text! = "Каждый день в \(formatter.string(from: timePicker.date))"
-//            + formatter.string(from: timePicker.date)
     }
     
     @objc func cancelBarButtonPressed() {
@@ -112,18 +129,43 @@ class HabitViewController: UIViewController {
     }
     
     @objc func saveBarButtonPressed() {
-       
+        if let habitChanged = self.habit {
+            habitChanged.name = habitText.text ?? ""
+            habitChanged.date = timePicker.date
+            habitChanged.color = circleColorButton.backgroundColor ?? .clear
+        } else {
+        
         let newHabit = Habit(name: habitText.text ?? "Название", date: timePicker.date, color: (circleColorButton.backgroundColor ?? UIColor(named: "Purple"))!)
         let store = HabitsStore.shared
         store.habits.append(newHabit)
             
-        self.dismiss(animated: true, completion: nil)
-        print(newHabit.date)
+        }
         
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    
+    @objc func deleteHabitAlert() {
+        if habit != nil {
+            let alertController = UIAlertController(title: "Удалить привычку", message: "Вы хотите удалить привычку \(String(describing: habit!.name))?", preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "Отмена", style: .cancel)
+            let confirm = UIAlertAction(title: "Удалить", style: .default, handler: { (action: UIAlertAction) in
+                self.deleteHabit()
+                self.dismiss(animated: true, completion: nil)
+            })
+            alertController.addAction(cancel)
+            alertController.addAction(confirm)
+            self.present(alertController, animated: true, completion: nil)
+        } else {
+            return
+        }
     
     }
     
-   
+    func deleteHabit() {
+        HabitsStore.shared.habits.removeAll {$0 == self.habit }
+    }
 
     
     
@@ -137,7 +179,7 @@ class HabitViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Создать"
+        
         let cancelButton = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(cancelBarButtonPressed))
         navigationItem.leftBarButtonItem = cancelButton
         cancelButton.tintColor = UIColor(named: "Purple")
@@ -148,6 +190,18 @@ class HabitViewController: UIViewController {
         
         
         setupViews()
+        
+        if let habitChange = habit {
+            navigationItem.title = "Править"
+            habitText.text = habit?.name
+            circleColorButton.backgroundColor = habitChange.color
+            timePicker.date = habitChange.date
+        }
+        else {
+    
+            navigationItem.title = "Создать"
+            habitDeleteButton.isHidden = true
+        }
     }
     
     func setupViews() {
@@ -160,7 +214,7 @@ class HabitViewController: UIViewController {
         habitView.addSubview(timeLabel)
         habitView.addSubview(timeText)
         habitView.addSubview(timePicker)
-//        habitView.addSubview(habitDeleteButton)
+        habitView.addSubview(habitDeleteButton)
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -222,12 +276,13 @@ class HabitViewController: UIViewController {
         
     
         
-//        habitDeleteButton.translatesAutoresizingMaskIntoConstraints = false
-//        habitDeleteButton.topAnchor.constraint(equalTo: timePicker.bottomAnchor, constant: 219).isActive = true
-//        habitDeleteButton.bottomAnchor.constraint(equalTo: habitView.bottomAnchor, constant: -CGFloat(heightIndent)).isActive = true
-//        habitDeleteButton.centerXAnchor.constraint(equalTo: habitView.centerXAnchor).isActive = true
-//        habitDeleteButton.heightAnchor.constraint(equalToConstant: 22).isActive = true
-//
+        habitDeleteButton.translatesAutoresizingMaskIntoConstraints = false
+        habitDeleteButton.topAnchor.constraint(equalTo: timePicker.bottomAnchor, constant: 219).isActive = true
+        habitDeleteButton.bottomAnchor.constraint(equalTo: habitView.bottomAnchor, constant: -CGFloat(heightIndent)).isActive = true
+        habitDeleteButton.centerXAnchor.constraint(equalTo: habitView.centerXAnchor).isActive = true
+        habitDeleteButton.heightAnchor.constraint(equalToConstant: 22).isActive = true
+        habitDeleteButton.addTarget(self, action: #selector(deleteHabitAlert), for: .touchUpInside)
+
         
 
     }

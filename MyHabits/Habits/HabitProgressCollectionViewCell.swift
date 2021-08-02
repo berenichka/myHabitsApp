@@ -8,8 +8,6 @@
 import UIKit
 
 
-
-
 class HabitProgressCollectionViewCell: UICollectionViewCell {
     
 
@@ -45,6 +43,13 @@ class HabitProgressCollectionViewCell: UICollectionViewCell {
         return bar
     }()
     
+    
+    func updateProgress() {
+        progressBar.setProgress(HabitsStore.shared.todayProgress, animated: false)
+        percentLabel.text = "\(Int(HabitsStore.shared.todayProgress * 100))%"
+    }
+
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -66,13 +71,12 @@ class HabitProgressCollectionViewCell: UICollectionViewCell {
         mottoLabel.translatesAutoresizingMaskIntoConstraints = false
         mottoLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(topIndent)).isActive = true
         mottoLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: CGFloat(sideIndent)).isActive = true
-        mottoLabel.widthAnchor.constraint(equalToConstant: CGFloat((self.frame.width - CGFloat(sideIndent * 2)) / 3 * 2)).isActive = true
         mottoLabel.heightAnchor.constraint(equalToConstant: 18).isActive = true
         
         percentLabel.translatesAutoresizingMaskIntoConstraints = false
         percentLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: CGFloat(topIndent)).isActive = true
         percentLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -CGFloat(sideIndent)).isActive = true
-        percentLabel.widthAnchor.constraint(equalToConstant:  CGFloat((self.frame.width - CGFloat(sideIndent * 2)) / 3 * 1)).isActive = true
+
         
         progressBar.translatesAutoresizingMaskIntoConstraints = false
         progressBar.topAnchor.constraint(equalTo: mottoLabel.bottomAnchor, constant: 10).isActive = true

@@ -23,10 +23,17 @@ class HabitsCollectionViewCell: UICollectionViewCell {
             nameLabel.text = habit?.name
             timeLabel.text = habit?.dateString
             colorCircleButton.layer.borderColor = habit?.color.cgColor
+            countLabel.text = "Счетчик: \(habit?.trackDates.count ?? 0)"
+            
+            if self.habit?.isAlreadyTakenToday == true {
+                colorCircleButton.backgroundColor = habit?.color
+                buttonChecked()
+            } else {
+                colorCircleButton.backgroundColor = .white
+            }
         }
     }
     
-    var counter = 0
     private let indent = 20
     
     private let nameLabel: UILabel = {
@@ -49,7 +56,7 @@ class HabitsCollectionViewCell: UICollectionViewCell {
         var label = UILabel()
         
         label.sizeToFit()
-        label.text = "Счётчик: \(counter)"
+        label.text = "Счётчик: "
         label.textColor = .systemGray
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         return label
@@ -77,6 +84,8 @@ class HabitsCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(colorCircleButton)
         
         setupFrames()
+        buttonChecked()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -113,34 +122,54 @@ class HabitsCollectionViewCell: UICollectionViewCell {
     }
     
     
-    @objc func circleButtonTapped() {
+    func buttonStateUpdated() {
         colorCircleButton.backgroundColor = habit?.color
-        
         let size = UIFont.systemFont(ofSize: 17, weight: .semibold)
         let imageParameters = UIImage.SymbolConfiguration(font: size)
         let image = UIImage(systemName: "checkmark", withConfiguration: imageParameters)
         colorCircleButton.setImage(image, for: .normal)
         colorCircleButton.tintColor = .white
+    }
+    
+    @objc func circleButtonTapped() {
+        
         if habit?.isAlreadyTakenToday == false {
-        counter += 1
-        countLabel.text = "Счётчик: \(counter)"
+        colorCircleButton.backgroundColor = habit?.color
+        
+        buttonChecked()
         HabitsStore.shared.track(habit!)
-//        guard let habit = habit else { return }
-            delegate?.updateProgress()}
+        countLabel.text = "Счётчик: \(habit?.trackDates.count ?? 0)"
         
-        
+        delegate?.updateProgress()
+            
+        }
+    }
+    
+    func buttonChecked() {
+        let size = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        let imageParameters = UIImage.SymbolConfiguration(font: size)
+        let image = UIImage(systemName: "checkmark", withConfiguration: imageParameters)
+        colorCircleButton.setImage(image, for: .normal)
+        colorCircleButton.tintColor = .white
     }
    
 }
 
 
-extension HabitsCollectionViewCell: HabitProgressCollectionViewCellDelegate {
-    func updateProgress() {
-        let progressCell = HabitProgressCollectionViewCell()
-        let progress = progressCell.progressBar
-        let updatedProgress = HabitsStore.shared.todayProgress
-        progress.setProgress(updatedProgress, animated: false)
-        
-        
-    }
+extension HabitProgressCollectionViewCell: HabitProgressCollectionViewCellDelegate {
+//    func updateProgress() {
+//        let progressCell = HabitProgressCollectionViewCell()
+//        progressCell.progressBar.setProgress(HabitsStore.shared.todayProgress, animated: false)
+//        progressCell.percentLabel.text = "\(Int(HabitsStore.shared.todayProgress * 100))%"
+//    }
+
+
+//    func updateProgress() {
+//        let progressCell = HabitProgressCollectionViewCell()
+//        let progress = progressCell.progressBar
+//        let updatedProgress = HabitsStore.shared.todayProgress
+//        progress.setProgress(updatedProgress, animated: false)
+//
+//
+//    }
 }

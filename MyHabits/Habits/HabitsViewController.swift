@@ -35,7 +35,6 @@ class HabitsViewController: UIViewController {
         }
     }
     
-    //HabitsViewController
     private var myHabits: [Habit] = [] {
         didSet {
             collectionView.reloadData()
@@ -61,7 +60,7 @@ class HabitsViewController: UIViewController {
     }()
     
     
-    @objc func habitCreateChange() {
+    @objc func habitCreate() {
 
         if let habitViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "habit") as? HabitViewController {
             let navigationController = UINavigationController(rootViewController: habitViewController)
@@ -71,6 +70,8 @@ class HabitsViewController: UIViewController {
         
     }
 
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,7 +89,7 @@ class HabitsViewController: UIViewController {
         self.navigationController?.modalPresentationStyle = .fullScreen
         
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "addButtonSymbol"), style: .plain, target: self, action: #selector(habitCreateChange))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "addButtonSymbol"), style: .plain, target: self, action: #selector(habitCreate))
         self.navigationController?.navigationBar.tintColor = UIColor(named: "Purple")
         
         placeHolderView.translatesAutoresizingMaskIntoConstraints = false
@@ -108,7 +109,10 @@ class HabitsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super .viewWillAppear(true)
         self.myHabits = HabitsStore.shared.habits
-        collectionView.reloadData()
+        let cellTypeHabit = HabitsCollectionViewCell()
+        if cellTypeHabit.habit?.isAlreadyTakenToday == true {
+            cellTypeHabit.buttonStateUpdated()
+        }
         
     }
 
@@ -156,18 +160,24 @@ extension HabitsViewController: UICollectionViewDataSource {
         }
     }
     
+    
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch Section(section: indexPath.section) {
         case .HabitsAdded:
             let cellTypeHabit = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: HabitsCollectionViewCell.self), for: indexPath) as! HabitsCollectionViewCell
 
             if indexPath.section == 1 {
-                cellTypeHabit.habit = myHabits[indexPath.item]}
+                cellTypeHabit.habit = myHabits[indexPath.item]
+                
+            }
             
                 return cellTypeHabit
 
         case .Progress:
             let cellTypeProgress = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: HabitProgressCollectionViewCell.self), for: indexPath) as! HabitProgressCollectionViewCell
+            cellTypeProgress.updateProgress()
+            
             return cellTypeProgress
 
         case .Unknown:
@@ -178,6 +188,16 @@ extension HabitsViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 1: let vc = HabitDetailsViewController(habit: HabitsStore.shared.habits[indexPath.row])
+            navigationController?.pushViewController(vc, animated: true)
+
+        default: break
+            
+        }
     }
     
 }
