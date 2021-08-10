@@ -43,8 +43,7 @@ class InfoTableViewCell: UITableViewCell {
         infoText.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         infoText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         infoText.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-        infoText.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -CGFloat(verticalIndent)).isActive = true
-//        
+        infoText.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -CGFloat(verticalIndent)).isActive = true     
     }
 
 }

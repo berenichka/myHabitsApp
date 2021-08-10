@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 class HabitsViewController: UIViewController {
     
     private enum Section {
@@ -24,12 +25,12 @@ class HabitsViewController: UIViewController {
             }
         }
     }
-    
+
     private let habitCellId = "habitCell"
     private let leftIndent = 16
     private let rightIndent = 17
     
-    private var myProgress = HabitProgressCollectionViewCell() {
+    private var myProgress: Float = HabitsStore.shared.todayProgress {
         didSet {
             collectionView.reloadData()
         }
@@ -113,7 +114,6 @@ class HabitsViewController: UIViewController {
         if cellTypeHabit.habit?.isAlreadyTakenToday == true {
             cellTypeHabit.buttonStateUpdated()
         }
-        
     }
 
 }
@@ -169,7 +169,7 @@ extension HabitsViewController: UICollectionViewDataSource {
 
             if indexPath.section == 1 {
                 cellTypeHabit.habit = myHabits[indexPath.item]
-                
+                cellTypeHabit.delegate = self
             }
             
                 return cellTypeHabit
@@ -178,6 +178,7 @@ extension HabitsViewController: UICollectionViewDataSource {
             let cellTypeProgress = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: HabitProgressCollectionViewCell.self), for: indexPath) as! HabitProgressCollectionViewCell
             cellTypeProgress.updateProgress()
             
+          
             return cellTypeProgress
 
         case .Unknown:
@@ -203,4 +204,11 @@ extension HabitsViewController: UICollectionViewDataSource {
 }
 
 
+extension HabitsViewController: HabitProgressCollectionViewCellDelegate {
+    func reloadData() {
+        collectionView.reloadData()
+    }
+}
+    
+    
 

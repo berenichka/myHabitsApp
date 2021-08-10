@@ -8,7 +8,7 @@
 import UIKit
 
 protocol HabitProgressCollectionViewCellDelegate: class {
-    func updateProgress()
+    func reloadData()
 }
 
 
@@ -140,7 +140,7 @@ class HabitsCollectionViewCell: UICollectionViewCell {
         HabitsStore.shared.track(habit!)
         countLabel.text = "Счётчик: \(habit?.trackDates.count ?? 0)"
         
-        delegate?.updateProgress()
+        delegate?.reloadData()
             
         }
     }
@@ -156,20 +156,3 @@ class HabitsCollectionViewCell: UICollectionViewCell {
 }
 
 
-extension HabitProgressCollectionViewCell: HabitProgressCollectionViewCellDelegate {
-//    func updateProgress() {
-//        let progressCell = HabitProgressCollectionViewCell()
-//        progressCell.progressBar.setProgress(HabitsStore.shared.todayProgress, animated: false)
-//        progressCell.percentLabel.text = "\(Int(HabitsStore.shared.todayProgress * 100))%"
-//    }
-
-
-//    func updateProgress() {
-//        let progressCell = HabitProgressCollectionViewCell()
-//        let progress = progressCell.progressBar
-//        let updatedProgress = HabitsStore.shared.todayProgress
-//        progress.setProgress(updatedProgress, animated: false)
-//
-//
-//    }
-}

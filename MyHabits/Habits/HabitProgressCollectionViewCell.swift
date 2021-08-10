@@ -60,6 +60,7 @@ class HabitProgressCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(progressBar)
         
         setupFrames()
+        updateProgress()
     }
     
     required init?(coder: NSCoder) {

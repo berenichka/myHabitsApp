@@ -152,7 +152,9 @@ class HabitViewController: UIViewController {
             let cancel = UIAlertAction(title: "Отмена", style: .cancel)
             let confirm = UIAlertAction(title: "Удалить", style: .default, handler: { (action: UIAlertAction) in
                 self.deleteHabit()
-                self.dismiss(animated: true, completion: nil)
+                let habitsViewController = HabitsViewController()
+                self.navigationController?.pushViewController(habitsViewController, animated: true)
+                
             })
             alertController.addAction(cancel)
             alertController.addAction(confirm)
@@ -271,7 +273,6 @@ class HabitViewController: UIViewController {
         timePicker.leadingAnchor.constraint(equalTo: habitView.leadingAnchor).isActive = true
         timePicker.trailingAnchor.constraint(equalTo: habitView.trailingAnchor).isActive = true
         timePicker.heightAnchor.constraint(equalToConstant: 216).isActive = true
-        timePicker.bottomAnchor.constraint(equalTo: habitView.bottomAnchor, constant: -100).isActive = true
         timePicker.addTarget(self, action: #selector(timeChanged), for: .valueChanged)
         
     
