@@ -153,7 +153,8 @@ class HabitViewController: UIViewController {
             let confirm = UIAlertAction(title: "Удалить", style: .default, handler: { (action: UIAlertAction) in
                 self.deleteHabit()
                 let habitsViewController = HabitsViewController()
-                self.navigationController?.pushViewController(habitsViewController, animated: true)
+                self.show(habitsViewController, sender: Any?.self)
+                habitsViewController.navigationItem.hidesBackButton = true
                 
             })
             alertController.addAction(cancel)
